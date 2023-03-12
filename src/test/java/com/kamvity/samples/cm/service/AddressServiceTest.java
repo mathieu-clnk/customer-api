@@ -43,11 +43,13 @@ public class AddressServiceTest {
     }
 
     @Test
+    @Sql("/delete-addresses.sql")
+    @Sql("/delete-customer.sql")
     @Sql("/create-customer.sql")
     public void testCreateAddress() {
         Address address = createAddress();
         ResponseEntity<Response<Address>> responseEntity = addressService.createAddress(address);
         assertEquals(HttpStatus.CREATED,responseEntity.getStatusCode());
-        assertEquals(Long.decode("1"),responseEntity.getBody().getResult().getAddressId());
+        assertEquals("Lyon",responseEntity.getBody().getResult().getCity());
     }
 }

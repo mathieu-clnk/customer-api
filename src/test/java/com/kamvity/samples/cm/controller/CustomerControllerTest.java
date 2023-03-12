@@ -51,6 +51,8 @@ public class CustomerControllerTest {
         assertEquals("success",customerResponse.getStatus());
     }
     @Test
+    @Sql("/delete-addresses.sql")
+    @Sql("/delete-customer.sql")
     @Sql("/create-customer.sql")
     public void testGetCustomer() {
         HttpHeaders headers = new HttpHeaders();

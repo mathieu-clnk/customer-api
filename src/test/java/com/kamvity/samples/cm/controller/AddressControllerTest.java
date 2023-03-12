@@ -16,6 +16,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.junit.Assert.assertEquals;
@@ -33,12 +34,12 @@ public class AddressControllerTest {
 
     public Address createAddress() {
         Address address = new Address();
-        address.setAddressId(Long.decode("1"));
-        address.setAddress("12 rue du lac");
+        address.setAddressId(Long.decode("1234"));
+        address.setAddress("3 rue Henri Janin");
         address.setName("Home");
-        address.setCity("Lyon");
+        address.setCity("Saint-Rémy-lès-Chevreuse");
         address.setCountry("France");
-        address.setZipCode("69003");
+        address.setZipCode("78575");
         address.setCustomerId(Long.decode("123456"));
         address.setIsDefault(Boolean.TRUE);
 
@@ -46,6 +47,8 @@ public class AddressControllerTest {
     }
 
     @Test
+    @Sql("/delete-customer.sql")
+    @Sql("/create-customer.sql")
     public void testCreateAddress() throws JsonProcessingException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

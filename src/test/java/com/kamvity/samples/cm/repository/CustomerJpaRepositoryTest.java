@@ -27,11 +27,11 @@ public class CustomerJpaRepositoryTest {
     public AddressEntity createAddress() {
         AddressEntity addressEntity = new AddressEntity();
         addressEntity.setAddressId(Long.decode("1"));
-        addressEntity.setAddress("12 rue du lac");
+        addressEntity.setAddress("Borner street 535");
         addressEntity.setName("Office");
-        addressEntity.setCity("Lyon");
-        addressEntity.setCountry("France");
-        addressEntity.setZipCode("69003");
+        addressEntity.setCity("Amsterdam");
+        addressEntity.setCountry("Netherland");
+        addressEntity.setZipCode("1019");
         //addressEntity.setCustomerEntity(new CustomerEntity());
         addressEntity.setIsDefault(Boolean.TRUE);
 
@@ -40,24 +40,25 @@ public class CustomerJpaRepositoryTest {
     @Test
     public void testSave() {
         CustomerEntity customerEntity = new CustomerEntity();
-        customerEntity.setEmail("frida.kahlo@email.com");
-        customerEntity.setLastname("Kahlo");
+        customerEntity.setEmail("anne.frank@email.com");
+        customerEntity.setLastname("Frank");
         customerEntity.setTitle("Mrs");
-        customerEntity.setFirstname("Frida");
-        assertEquals("Frida",customerJpaRepository.save(customerEntity).getFirstname());
+        customerEntity.setFirstname("Anne");
+        assertEquals("Anne",customerJpaRepository.save(customerEntity).getFirstname());
         AddressEntity address = createAddress();
         address.setCustomer(customerEntity);
         AddressEntity addressEntity = addressJpaRepository.save(address);
-        assertEquals("Lyon",addressEntity.getCity());
-        assertEquals("Frida",addressEntity.getCustomer().getFirstname());
+        assertEquals("Amsterdam",addressEntity.getCity());
+        assertEquals("Anne",addressEntity.getCustomer().getFirstname());
         List<AddressEntity> addressEntities = new ArrayList<>();
         addressEntities.add(address);
         customerEntity.setAddressEntities(addressEntities);
-        assertEquals("Lyon",customerJpaRepository.save(customerEntity).getAddressEntities().get(0).getCity());
-        assertEquals("Frida",customerJpaRepository.findAll().get(0).getFirstname());
+        assertEquals("Amsterdam",customerJpaRepository.save(customerEntity).getAddressEntities().get(0).getCity());
+        assertEquals("Anne",customerJpaRepository.findAll().get(0).getFirstname());
 
     }
     @Test
+    @Sql("/delete-customer.sql")
     @Sql("/create-customer.sql")
     public void testFindByEmail() {
         assertEquals("Marie",customerJpaRepository.findByEmail("marie.curie@email.org").getFirstname());

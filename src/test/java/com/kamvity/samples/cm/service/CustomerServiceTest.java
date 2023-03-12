@@ -33,17 +33,19 @@ public class CustomerServiceTest {
     @Test
     public void testCreateCustomerEssential() {
         Customer customer = new Customer();
-        customer.setEmail("frida.kahlo@email.org");
-        customer.setLastname("Kahlo");
+        customer.setEmail("amelia.earhart@email.org");
+        customer.setLastname("Earhart");
         customer.setTitle("Mrs");
         ResponseEntity<Response<Customer>> responseEntity = customerService.createCustomer(customer);
         assertEquals("success",responseEntity.getBody().getStatus());
         Customer resultCustomer = responseEntity.getBody().getResult();
-        assertEquals("frida.kahlo@email.org",resultCustomer.getEmail());
+        assertEquals("amelia.earhart@email.org",resultCustomer.getEmail());
         assert resultCustomer.getId() > 0;
     }
 
     @Test
+    @Sql("/delete-addresses.sql")
+    @Sql("/delete-customer.sql")
     @Sql("/create-customer.sql")
     public void testCreateExistingCustomer() {
         Customer customer = new Customer();

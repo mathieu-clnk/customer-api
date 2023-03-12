@@ -18,6 +18,8 @@ public class AddressJpaRepositoryTest {
     AddressJpaRepository addressJpaRepository;
 
     @Test
+    @Sql("/delete-addresses.sql")
+    @Sql("/delete-customer.sql")
     @Sql("/create-customer.sql")
     @Sql("/create-addresses.sql")
     public void testGetAddressesByCustomer() {
