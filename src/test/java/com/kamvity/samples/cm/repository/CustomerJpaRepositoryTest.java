@@ -1,0 +1,67 @@
+package com.kamvity.samples.cm.repository;
+
+import com.kamvity.samples.cm.entity.AddressEntity;
+import com.kamvity.samples.cm.entity.CustomerEntity;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.jdbc.Sql;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+
+@DataJpaTest
+public class CustomerJpaRepositoryTest {
+
+    @Autowired
+    CustomerJpaRepository customerJpaRepository;
+
+    @Autowired
+    AddressJpaRepository addressJpaRepository;
+
+    public AddressEntity createAddress() {
+        AddressEntity addressEntity = new AddressEntity();
+        addressEntity.setAddressId(Long.decode("1"));
+        addressEntity.setAddress("12 rue du lac");
+        addressEntity.setName("Office");
+        addressEntity.setCity("Lyon");
+        addressEntity.setCountry("France");
+        addressEntity.setZipCode("69003");
+        //addressEntity.setCustomerEntity(new CustomerEntity());
+        addressEntity.setIsDefault(Boolean.TRUE);
+
+        return addressEntity;
+    }
+    @Test
+    public void testSave() {
+        CustomerEntity customerEntity = new CustomerEntity();
+        customerEntity.setEmail("frida.kahlo@email.com");
+        customerEntity.setLastname("Kahlo");
+        customerEntity.setTitle("Mrs");
+        customerEntity.setFirstname("Frida");
+        assertEquals("Frida",customerJpaRepository.save(customerEntity).getFirstname());
+        AddressEntity address = createAddress();
+        address.setCustomer(customerEntity);
+        AddressEntity addressEntity = addressJpaRepository.save(address);
+        assertEquals("Lyon",addressEntity.getCity());
+        assertEquals("Frida",addressEntity.getCustomer().getFirstname());
+        List<AddressEntity> addressEntities = new ArrayList<>();
+        addressEntities.add(address);
+        customerEntity.setAddressEntities(addressEntities);
+        assertEquals("Lyon",customerJpaRepository.save(customerEntity).getAddressEntities().get(0).getCity());
+        assertEquals("Frida",customerJpaRepository.findAll().get(0).getFirstname());
+
+    }
+    @Test
+    @Sql("/create-customer.sql")
+    public void testFindByEmail() {
+        assertEquals("Marie",customerJpaRepository.findByEmail("marie.curie@email.org").getFirstname());
+        assertTrue(Objects.isNull(customerJpaRepository.findByEmail("does.not.exist")));
+    }
+
+}
