@@ -1,5 +1,5 @@
 ![Coverage](.github/badges/jacoco.svg)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/4bf91301f0d14ea186cc2e0515542acd)](https://www.codacy.com/gh/mathieu-clnk/customerEntity-api/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=mathieu-clnk/customerEntity-api&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/03d2e9f09cc64084b83231378e597aee)](https://www.codacy.com/gh/mathieu-clnk/customer-api/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=mathieu-clnk/customer-api&amp;utm_campaign=Badge_Grade)
 
 # Customer API
 
