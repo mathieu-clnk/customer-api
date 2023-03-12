@@ -1,7 +1,7 @@
 name: Order Management
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   build:
