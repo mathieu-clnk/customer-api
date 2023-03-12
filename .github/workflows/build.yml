@@ -48,14 +48,18 @@ jobs:
             exit 1
           }
           update_new() {
+            echo "Update new version"
             version=$(cat swagger.json|json "info.version")
             swaggerhub api:get MATHIEUKAMVITY/customer-application/$version > /dev/null 2>&1
             if [ "$?" == "0" ]
             then
+              echo "Update the existing version ${version}"
               swaggerhub api:update MATHIEUKAMVITY/customer-application/$version -f swagger.json || die "Cannot create the version"
             else
+              echo "Create a new version ${version}"
               swaggerhub api:create MATHIEUKAMVITY/customer-application/$version -f swagger.json || die "Cannot create the version"
             fi
+            echo "Publish the version"
             swaggerhub api:publish MATHIEUKAMVITY/customer-application/$version || die "Cannot publish the version"
           }
           npm i -g swaggerhub-cli
