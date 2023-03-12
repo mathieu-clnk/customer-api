@@ -1,5 +1,5 @@
 openapi:
-  version: v0
+  version: v1
 
 spring:
   jpa:
