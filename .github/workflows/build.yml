@@ -1,4 +1,4 @@
-name: Order Management
+name: Customer Management
 on:
   push:
     branches: [ main ]
