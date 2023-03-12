@@ -50,14 +50,14 @@ jobs:
           update_new() {
             echo "Update new version"
             version=$(cat swagger.json|json "info.version")
-            swaggerhub api:get MATHIEUKAMVITY/customer-application/$version > /dev/null 2>&1
-            if [ "$?" == "0" ]
+            result=$(swaggerhub api:get MATHIEUKAMVITY/customer-application/$version 2> /dev/null || echo "Not found")
+            if [ "$result" == "Not found" ]
             then
-              echo "Update the existing version ${version}"
-              swaggerhub api:update MATHIEUKAMVITY/customer-application/$version -f swagger.json || die "Cannot create the version"
-            else
               echo "Create a new version ${version}"
               swaggerhub api:create MATHIEUKAMVITY/customer-application/$version -f swagger.json || die "Cannot create the version"
+            else
+              echo "Update the existing version ${version}"
+              swaggerhub api:update MATHIEUKAMVITY/customer-application/$version -f swagger.json || die "Cannot create the version"
             fi
             echo "Publish the version"
             swaggerhub api:publish MATHIEUKAMVITY/customer-application/$version || die "Cannot publish the version"
