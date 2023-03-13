@@ -26,8 +26,11 @@ public class CustomerController {
 
     @PostMapping(path = "/get-by-email",consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Response<Customer>> getByEmail(@RequestBody String email) {
-        ResponseEntity<Response<Customer>> response = customerService.findByEmail(email);
-        return response;
+        return customerService.findByEmail(email);
+    }
+    @PostMapping(path = "/get-by-id",consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Response<Customer>> getById(@RequestBody String id) {
+        return customerService.getById(Long.decode(id));
     }
 
 }

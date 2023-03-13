@@ -61,8 +61,8 @@ public class CustomerJpaRepositoryTest {
     @Sql("/delete-customer.sql")
     @Sql("/create-customer.sql")
     public void testFindByEmail() {
-        assertEquals("Marie",customerJpaRepository.findByEmail("marie.curie@email.org").getFirstname());
-        assertTrue(Objects.isNull(customerJpaRepository.findByEmail("does.not.exist")));
+        assertEquals("Marie",customerJpaRepository.findByEmail("marie.curie@email.org").get().getFirstname());
+        assertTrue(customerJpaRepository.findByEmail("does.not.exist").isEmpty());
     }
 
 }

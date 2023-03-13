@@ -57,5 +57,26 @@ public class CustomerServiceTest {
         assertEquals("failed",responseEntity.getBody().getStatus());
         assertEquals("This email is already used.",responseEntity.getBody().getErrorMessage());
     }
+    @Test
+    @Sql("/delete-addresses.sql")
+    @Sql("/delete-customer.sql")
+    @Sql("/create-customer.sql")
+    public void testFindByEmail() {
+        ResponseEntity<Response<Customer>> responseEntity = customerService.findByEmail("marie.curie@email.org");
+        assertEquals(HttpStatus.OK,responseEntity.getStatusCode());
+        assertEquals("success",responseEntity.getBody().getStatus());
+        assertEquals("Marie",responseEntity.getBody().getResult().getFirstname());
+    }
+
+    @Test
+    @Sql("/delete-addresses.sql")
+    @Sql("/delete-customer.sql")
+    @Sql("/create-customer.sql")
+    public void testgetById() {
+        ResponseEntity<Response<Customer>> responseEntity = customerService.getById(Long.decode("123456"));
+        assertEquals(HttpStatus.OK,responseEntity.getStatusCode());
+        assertEquals("success",responseEntity.getBody().getStatus());
+        assertEquals("Marie",responseEntity.getBody().getResult().getFirstname());
+    }
 
 }

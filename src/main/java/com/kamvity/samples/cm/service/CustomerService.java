@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class CustomerService {
@@ -29,41 +30,74 @@ public class CustomerService {
 
     public ResponseEntity<Response<Customer>> createCustomer(Customer customer) {
         Response<Customer> response = new Response<>();
-        HttpStatus status = HttpStatus.BAD_REQUEST;
-        if(Objects.isNull(customerRepository.findByEmail(customer.getEmail()))) {
-            try {
-                response.setResult(convertToDto(customerRepository.save(convertFromDto(customer))));
-                response.setStatus(response.SUCCESS);
-                status = HttpStatus.CREATED;
-            }catch (IllegalArgumentException ie) {
-                response.setErrorMessage("Null object given.");
-                response.setStatus(response.FAILED);
-            }catch (OptimisticLockingFailureException op) {
-                response.setErrorMessage("Error with the backend.");
-                response.setStatus(response.FAILED);
-            }
+        Optional<CustomerEntity> customerEntity = customerRepository.findByEmail(customer.getEmail());
+        customerEntity.ifPresentOrElse(
+                (entity) -> {
+                    response.setStatus(response.FAILED);
+                    response.setErrorMessage("This email is already used.");
+                },
+                () -> {
+                    try {
+                        response.setResult(convertToDto(customerRepository.save(convertFromDto(customer))));
+                        response.setStatus(response.SUCCESS);
+                    }catch (IllegalArgumentException ie) {
+                        response.setErrorMessage("Null object given.");
+                        response.setStatus(response.FAILED);
+                    }catch (OptimisticLockingFailureException op) {
+                        response.setErrorMessage("Error with the backend.");
+                        response.setStatus(response.FAILED);
+                    }
+                }
+        );
 
-        }else {
-            response.setStatus(response.FAILED);
-            response.setErrorMessage("This email is already used.");
+        if(response.getStatus().equals(response.SUCCESS)) {
+            return ResponseEntity.status(HttpStatus.OK).body(response);
         }
-        return ResponseEntity.status(status).body(response);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
     public ResponseEntity<Response<Customer>> findByEmail(String email) {
 
-        CustomerEntity customerEntity = customerRepository.findByEmail(email);
+        Optional<CustomerEntity> customerEntity = customerRepository.findByEmail(email);
         Response<Customer> response = new Response<>();
-        HttpStatus status = HttpStatus.NOT_FOUND;
-        if(Objects.isNull(customerEntity)) {
-            response.setStatus(response.FAILED);
-            response.setErrorMessage("CustomerEntity not found.");
-        }else {
-            Customer customer = convertToDto(customerEntity);
-            response.setStatus(response.SUCCESS);
-            response.setResult(customer);
-            status = HttpStatus.OK;
+        customerEntity.ifPresentOrElse(
+                (entity) -> {
+                    response.setStatus(response.SUCCESS);
+                    response.setResult(convertToDto(entity));
+                },
+                () -> {
+                    response.setStatus(response.FAILED);
+                    response.setErrorMessage("Customer not found.");
+                }
+        );
+
+        if(response.getStatus().equals(response.SUCCESS)) {
+            return ResponseEntity.status(HttpStatus.OK).body(response);
         }
-        return ResponseEntity.status(status).body(response);
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    public ResponseEntity<Response<Customer>> getById(Long id) {
+        Optional<CustomerEntity> customerEntity = customerRepository.findById(id);
+        Response<Customer> response = new Response<>();
+        customerEntity.ifPresentOrElse(
+                (entity) -> {
+                    response.setStatus(response.SUCCESS);
+                    response.setResult(convertToDto(entity));
+                },
+                () -> {
+                    response.setStatus(response.FAILED);
+                    response.setErrorMessage("Customer not found.");
+                }
+        );
+
+        if(response.getStatus().equals(response.SUCCESS)) {
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+
     }
 
     private Customer convertToDto(CustomerEntity customerEntity) {

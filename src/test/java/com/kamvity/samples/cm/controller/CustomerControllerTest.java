@@ -63,4 +63,17 @@ public class CustomerControllerTest {
         assertEquals("marie.curie@email.org",customerResponse.getResult().get("email"));
     }
 
+    @Test
+    @Sql("/delete-addresses.sql")
+    @Sql("/delete-customer.sql")
+    @Sql("/create-customer.sql")
+    public void testGetCustomerById() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        String url = "http://localhost:" + port+"/api/v1/customers/get-by-id";
+        HttpEntity<String> httpEntity = new HttpEntity<>("123456",headers);
+        Response<HashMap> customerResponse = restTemplate.postForObject(url,httpEntity, Response.class);
+        assertEquals("marie.curie@email.org",customerResponse.getResult().get("email"));
+    }
+
 }
