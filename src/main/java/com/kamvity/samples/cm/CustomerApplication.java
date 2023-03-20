@@ -21,6 +21,7 @@ import org.springframework.context.annotation.Bean;
         info = @Info(
                 title = "Customer API application",
                 description = "API to manage customer",
+                version = "v0",
                 contact = @Contact(name = "Mathieu", email = "mathieu.kamvity@gmail.com")
         ),
         servers = @Server(
