@@ -5,8 +5,10 @@ import com.kamvity.samples.cm.response.Response;
 import com.kamvity.samples.cm.service.CustomerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/customers")
-@Tag(name = "customers", description = "Customer API")
+@Tag(name = "customer-controller", description = "Customer API")
 public class CustomerController {
 
     @Autowired
@@ -27,8 +29,16 @@ public class CustomerController {
 
     @PostMapping(path = "/create",consumes = {MediaType.APPLICATION_JSON_VALUE})
     @Operation(summary = "createCustomer",description = "Create a new customer")
-    @Parameter(name = "customer", schema = @Schema(implementation = Customer.class))
-    @ApiResponse(responseCode = "200")
+    @Parameter(name = "customer", schema = @Schema(implementation = Customer.class, example = "{ " +
+            "\"id\" : \"123456\"," +
+            "\"firstname\" : \"Nkosi\"," +
+            "\"lastname\" : \"Johnson\"," +
+            "\"email\" : \"nkosi.johnson@email.org\"" +
+            "}"))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Customer created successfully"),
+            @ApiResponse(responseCode = "400", description = "Error while creating the customer.")
+    })
     public ResponseEntity<Response<Customer>> createCustomer(@RequestBody Customer customer) {
         return customerService.createCustomer(customer);
     }
