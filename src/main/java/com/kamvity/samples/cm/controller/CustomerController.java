@@ -32,14 +32,6 @@ public class CustomerController {
 
     @PostMapping(path = "/create",consumes = {MediaType.APPLICATION_JSON_VALUE})
     @Operation(summary = "Create customer",description = "Create a new customer")
-    @Parameters(value = {
-            @Parameter(name = "customer", required = true, example = "{ " +
-            "\"id\" : \"123456\"," +
-            "\"firstname\" : \"Nkosi\"," +
-            "\"lastname\" : \"Johnson\"," +
-            "\"email\" : \"nkosi.johnson@email.org\"" +
-            "}")
-    })
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Customer created successfully", content = @Content(
                     examples = @ExampleObject(
@@ -58,9 +50,31 @@ public class CustomerController {
                                     "}"
                     )
             )),
-            @ApiResponse(responseCode = "400", description = "Error while creating the customer.")
+            @ApiResponse(responseCode = "400", description = "Error while creating the customer.", content = @Content(
+                    examples = @ExampleObject(
+                            name = "Customer exist response",
+                            value = "{"+
+                                    "\"status\": \"failed\","+
+                                    "\"errorMessage\": \"This email is already used.\"," +
+                                    "\"sensitiveMessage\": \"\"," +
+                                    "\"result\": {"+
+                                    "  \"id\": 0,"+
+                                    "  \"title\": \"\","+
+                                    "  \"firstname\": \"\","+
+                                    "  \"lastname\": \"\","+
+                                    "  \"email\": \"\""+
+                                    "}"+
+                                    "}"
+                    )
+            ))
     })
-    public ResponseEntity<Response<Customer>> createCustomer(@RequestBody Customer customer) {
+    public ResponseEntity<Response<Customer>> createCustomer(
+            @Parameter(required = true,example = "{ " +
+                    "\"id\" : \"123456\"," +
+                    "\"firstname\" : \"Nkosi\"," +
+                    "\"lastname\" : \"Johnson\"," +
+                    "\"email\" : \"nkosi.johnson@email.org\"" +
+                    "}") @RequestBody Customer customer) {
         return customerService.createCustomer(customer);
     }
 
