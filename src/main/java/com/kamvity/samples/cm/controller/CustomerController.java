@@ -52,7 +52,7 @@ public class CustomerController {
             )),
             @ApiResponse(responseCode = "400", description = "Error while creating the customer.", content = @Content(
                     examples = @ExampleObject(
-                            name = "Customer exist response",
+                            name = "Customer does already exist response",
                             value = "{"+
                                     "\"status\": \"failed\","+
                                     "\"errorMessage\": \"This email is already used.\"," +
@@ -69,12 +69,12 @@ public class CustomerController {
             ))
     })
     public ResponseEntity<Response<Customer>> createCustomer(
-            @Parameter(required = true,example = "{ " +
+            @Parameter(name = "customer",required = true,schema = @Schema(example = "{ " +
                     "\"id\" : \"123456\"," +
                     "\"firstname\" : \"Nkosi\"," +
                     "\"lastname\" : \"Johnson\"," +
                     "\"email\" : \"nkosi.johnson@email.org\"" +
-                    "}") @RequestBody Customer customer) {
+                    "}")) @RequestBody Customer customer) {
         return customerService.createCustomer(customer);
     }
 
