@@ -23,6 +23,9 @@ jobs:
         with:
           generate-branches-badge: true
 
+      - name: Generate javadoc
+        run: mvn javadoc:javadoc
+
       - name: Log coverage percentage
         run: |
           echo "coverage = ${{ steps.jacoco.outputs.coverage }}"
@@ -40,6 +43,12 @@ jobs:
         with:
           name: jacoco-report
           path: target/site/jacoco/
+
+      - name: Upload Javadoc
+        uses: actions/upload-artifact@v2
+        with:
+          name: javadoc
+          path: target/site/apidocs/
 
       - name: Publish to SwaggerHub (if needed)
         run: |

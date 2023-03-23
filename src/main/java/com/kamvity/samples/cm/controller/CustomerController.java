@@ -79,11 +79,89 @@ public class CustomerController {
     }
 
     @PostMapping(path = "/get-by-email",consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Response<Customer>> getByEmail(@RequestBody String email) {
+    @Operation(summary = "Get customer by Email", description = "Get a customer by its email. The email is unique.")
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "200", description = "A customer has been found with this email address.", content = @Content(
+                    examples = @ExampleObject(
+                            name = "Customer found.",
+                            value = "{" +
+                                    "\"status\": \"success\"," +
+                                    "\"errorMessage\": \"\"," +
+                                    "\"sensitiveMessage\": \"\"," +
+                                    "\"result\": {" +
+                                    "  \"id\": 123456," +
+                                    "  \"title\": \"Mrs\"," +
+                                    "  \"firstname\": \"Nina\"," +
+                                    "  \"lastname\": \"Simone\"," +
+                                    "  \"email\": \"nina.simone@email.org\"" +
+                                    "}" +
+                                    "}"
+                    )
+            )),
+            @ApiResponse(responseCode = "404", description = "No customer has been found with this email.", content = @Content(
+                    examples = @ExampleObject(
+                            name = "Customer not found.",
+                            value = "{" +
+                                    "\"status\": \"failed\"," +
+                                    "\"errorMessage\": \"TCustomer not found.\"," +
+                                    "\"sensitiveMessage\": \"\"," +
+                                    "\"result\": {" +
+                                    "  \"id\": 0," +
+                                    "  \"title\": \"\"," +
+                                    "  \"firstname\": \"\"," +
+                                    "  \"lastname\": \"\"," +
+                                    "  \"email\": \"\"" +
+                                    "}" +
+                                    "}"
+                    )
+            ))
+    })
+    public ResponseEntity<Response<Customer>> getByEmail(
+            @Parameter(name = "email",required = true,schema = @Schema(example = "email.address@domain.com"))
+            @RequestBody String email) {
         return customerService.findByEmail(email);
     }
     @PostMapping(path = "/get-by-id",consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Response<Customer>> getById(@RequestBody String id) {
+    @Operation(summary = "Get customer by Id.", description = "Get a customer by id.")
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "200", description = "A customer has been found with this Id.", content = @Content(
+                    examples = @ExampleObject(
+                            name = "Customer found.",
+                            value = "{" +
+                                    "\"status\": \"success\"," +
+                                    "\"errorMessage\": \"\"," +
+                                    "\"sensitiveMessage\": \"\"," +
+                                    "\"result\": {" +
+                                    "  \"id\": 123456," +
+                                    "  \"title\": \"Mrs\"," +
+                                    "  \"firstname\": \"Nina\"," +
+                                    "  \"lastname\": \"Simone\"," +
+                                    "  \"email\": \"nina.simone@email.org\"" +
+                                    "}" +
+                                    "}"
+                    )
+            )),
+            @ApiResponse(responseCode = "404", description = "No customer has been found with this Id.", content = @Content(
+                    examples = @ExampleObject(
+                            name = "Customer not found.",
+                            value = "{" +
+                                    "\"status\": \"failed\"," +
+                                    "\"errorMessage\": \"TCustomer not found.\"," +
+                                    "\"sensitiveMessage\": \"\"," +
+                                    "\"result\": {" +
+                                    "  \"id\": 0," +
+                                    "  \"title\": \"\"," +
+                                    "  \"firstname\": \"\"," +
+                                    "  \"lastname\": \"\"," +
+                                    "  \"email\": \"\"" +
+                                    "}" +
+                                    "}"
+                    )
+            ))
+    })
+    public ResponseEntity<Response<Customer>> getById(
+            @Parameter(name = "id",required = true,schema = @Schema(example = "111111"))
+            @RequestBody String id) {
         return customerService.getById(Long.decode(id));
     }
 
