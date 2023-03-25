@@ -1,7 +1,7 @@
 ![Coverage](.github/badges/jacoco.svg)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/03d2e9f09cc64084b83231378e597aee)](https://www.codacy.com/gh/mathieu-clnk/customer-api/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=mathieu-clnk/customer-api&amp;utm_campaign=Badge_Grade)
 [![Customer Management](https://github.com/mathieu-clnk/customer-api/actions/workflows/build.yml/badge.svg)](https://github.com/mathieu-clnk/customer-api/actions/workflows/build.yml)
-[![Vulnerabilities](https://snyk.io/test/github/mathieu-clnk/customer-api/badge.svg)
+![Vulnerabilities](https://snyk.io/test/github/mathieu-clnk/customer-api/badge.svg)
 # Customer API
 
 A sample application to manage customers.
